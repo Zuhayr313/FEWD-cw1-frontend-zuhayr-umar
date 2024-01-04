@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.nav-item.nav-link {
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and text color */
+  /* Other styles for your nav-link */
+}
+
+.nav-link.active {
+  /*border-radius: 20px; /* Adjust for desired pill shape */
+  background-color: #007bff; /* Example background color */
+  color: white; /* Text color for active link */
+}
