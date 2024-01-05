@@ -1,83 +1,124 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useState, useEffect } from 'react';
+
 
 const ItineraryForm = () => {
-    const [selectedHostels, setSelectedHostels] = useState([]);
-    const [hostelOptions, setHostelOptions] = useState([
-        { id: 1, name: 'Highland Hostel' },
-        { id: 2, name: 'Lochside Lodge' },
-        { id: 3, name: 'Edinburgh Escape' },
-        // ... add more hostels as needed
-    ]);
+    const [userName, setUserName] = useState('');
+    const [selectedHostelID, setSelectedHostelID] = useState([]);
+    const [stayDuration, setStayDuration] = useState('');
 
-    const addHostelToItinerary = (hostelId) => {
-        const hostel = hostelOptions.find(h => h.id === parseInt(hostelId));
-        if (hostel) {
-            setSelectedHostels([...selectedHostels, { ...hostel, startDate: new Date(), duration: '' }]);
+
+    const [hostelOptions, setHostelOptions] = useState([]);
+    const [showHostelList, setShowHostelList] = useState(false);
+
+    useEffect(() => {
+        fetchHostels();
+    }, []);
+
+    const fetchHostels = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/hostels');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            const simplifiedData = data.map(hostel => ({
+                id: hostel.id,
+                name: hostel.name
+            }));
+            setHostelOptions(simplifiedData);
+            //console.log('Hostel Options:', simplifiedData);
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
         }
     };
 
-    const handleStartDateChange = (index, date) => {
-        const updatedHostels = [...selectedHostels];
-        updatedHostels[index].startDate = date;
-        setSelectedHostels(updatedHostels);
+
+    const toggleHostelList = () => {
+        setShowHostelList(!showHostelList);
     };
 
-    const handleDurationChange = (index, duration) => {
-        const updatedHostels = [...selectedHostels];
-        updatedHostels[index].duration = duration;
-        setSelectedHostels(updatedHostels);
+    const handleHostelSelection = (e) => {
+        setSelectedHostelID(e.target.value);
     };
 
-    const handleRemoveHostel = (index) => {
-        const updatedHostels = selectedHostels.filter((_, i) => i !== index);
-        setSelectedHostels(updatedHostels);
+    const handleNameChange = (event) => {
+        setUserName(event.target.value);
+    };
+
+    const handleDurationChange = (event) => {
+        // Ensure that only numbers are entered
+        const value = event.target.value;
+        setStayDuration(value.replace(/[^0-9]/g, ''));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Itinerary Submission:', selectedHostels);
-        // Add logic here for what to do with the submitted data
-    };
-
-    const getMinDate = (index) => {
-        if (index === 0) return new Date();
-
-        const previousHostel = selectedHostels[index - 1];
-        const previousDate = new Date(previousHostel.startDate);
-        return new Date(previousDate.setDate(previousDate.getDate() + parseInt(previousHostel.duration)));
+        console.log('hostelOptions Submission:', hostelOptions);
+        console.log('User Name:', userName);
+        console.log('Selected Hostel ID:', selectedHostelID);
+        console.log('Stay Duration:', stayDuration);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <select onChange={(e) => addHostelToItinerary(e.target.value)} defaultValue="">
-                <option value="" disabled>Select a Hostel</option>
-                {hostelOptions.map(hostel => (
-                    <option key={hostel.id} value={hostel.id}>{hostel.name}</option>
-                ))}
-            </select>
+        <div>
+            <button onClick={toggleHostelList}>
+                {showHostelList ? 'Hide Hostel Options' : 'Show Hostel Options'}
+            </button>
 
-            {selectedHostels.map((hostel, index) => (
-                <div key={hostel.id}>
-                    <label>{hostel.name}</label>
-                    <DatePicker
-                        selected={new Date(hostel.startDate)}
-                        onChange={(date) => handleStartDateChange(index, date)}
-                        minDate={getMinDate(index)}
-                    />
-                    <input
-                        type="number"
-                        placeholder="Duration (nights)"
-                        value={hostel.duration}
-                        onChange={(e) => handleDurationChange(index, e.target.value)}
-                    />
-                    <button type="button" onClick={() => handleRemoveHostel(index)}>Remove</button>
+            {showHostelList && (
+                <div>
+                    <h3>Hostel Options:</h3>
+                    <ul>
+                        {hostelOptions.map(hostel => (
+                            <li key={hostel.id}>
+                                {hostel.name} (ID: {hostel.id})
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-            ))}
+            )}
 
-            <button type="submit">Submit Itinerary</button>
-        </form>
+            <form onSubmit={handleSubmit}>
+
+                <div>
+                    <label>
+                        Name:
+                        <input
+                            type="text"
+                            value={userName}
+                            onChange={handleNameChange}
+                            placeholder="Enter your name"
+                        />
+                    </label>
+                </div>
+
+                <div>
+                    <label>Select a Hostel:</label>
+                    <select value={selectedHostelID} onChange={handleHostelSelection}>
+                        <option value="">Select a Hostel</option>
+                        {hostelOptions.map(hostel => (
+                            <option key={hostel.id} value={hostel.id}>
+                                {hostel.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
+                    <label>
+                        Stay Duration (in days):
+                        <input
+                            type="text" // Using type "text" to allow validation
+                            value={stayDuration}
+                            onChange={handleDurationChange}
+                            placeholder="Enter number of days"
+                        />
+                    </label>
+                </div>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     );
 };
 
