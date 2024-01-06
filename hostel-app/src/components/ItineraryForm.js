@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReviewForm from './ReviewForm';
 
 
 const ItineraryForm = () => {
@@ -46,17 +47,116 @@ const ItineraryForm = () => {
     };
 
     const handleDurationChange = (event) => {
-        // Ensure that only numbers are entered
+        // Ensured that only numbers are entered
         const value = event.target.value;
         setStayDuration(value.replace(/[^0-9]/g, ''));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('hostelOptions Submission:', hostelOptions);
         console.log('User Name:', userName);
         console.log('Selected Hostel ID:', selectedHostelID);
         console.log('Stay Duration:', stayDuration);
+
+        const itineraryData = { selectedHostelID, stayDuration };
+        let userItineraryExists = false;
+
+
+        try {
+            const response = await fetch(`http://localhost:3000/itineraries`, {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            // Iterate through the result to check if the user has an itinerary
+            for (let itinerary of result) {
+                if (itinerary.user === userName) {
+                    try {
+                        const response = await fetch(`http://localhost:3000/itineraries/stages/new/${userName}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(itineraryData),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Error: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        console.log('Itinerary successfully created:', result);
+
+                        // Reset form fields
+                        setUserName('');
+                        setSelectedHostelID('');
+                        setStayDuration('');
+                    } catch (error) {
+                        console.error('Failed to create itinerary:', error);
+                    }
+
+                    userItineraryExists = true;
+
+                }
+            }
+
+            if (!userItineraryExists) {
+                //User's name not found in any existing itinerary
+                // Create a new itinerary and add the hostel stay for the user
+                try {
+                    const response = await fetch(`http://localhost:3000/itineraries/new/${userName}`, {
+                        method: 'GET'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status}`);
+                    }
+
+
+                    const result = await response.json();
+                    console.log('Itinerary successfully created:', result);
+
+                } catch (error) {
+                    console.error('Failed to create itinerary:', error);
+                }
+
+                try {
+                    const response = await fetch(`http://localhost:3000/itineraries/stages/new/${userName}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(itineraryData),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Itinerary successfully created:', result);
+
+                    // Reset form fields
+                    setUserName('');
+                    setSelectedHostelID('');
+                    setStayDuration('');
+                } catch (error) {
+                    console.error('Failed to create itinerary:', error);
+                }
+            }
+
+            console.log('Itinerary already created:', userItineraryExists ? 'yes' : 'no');
+
+        } catch (error) {
+            console.error('Failed to fetch itineraries:', error);
+        }
+
     };
 
     return (
@@ -108,7 +208,7 @@ const ItineraryForm = () => {
                     <label>
                         Stay Duration (in days):
                         <input
-                            type="text" // Using type "text" to allow validation
+                            type="text"
                             value={stayDuration}
                             onChange={handleDurationChange}
                             placeholder="Enter number of days"
@@ -118,6 +218,8 @@ const ItineraryForm = () => {
 
                 <button type="submit">Submit</button>
             </form>
+
+
         </div>
     );
 };
