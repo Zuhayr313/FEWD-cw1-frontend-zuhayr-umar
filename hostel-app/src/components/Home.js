@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Map from './Map';
+import HostelSearch from './HostelSearch';
 
 const Home = () => {
     const [hostels, setHostels] = useState([]);
@@ -22,13 +23,15 @@ const Home = () => {
 
     return (
         <>
-            <div>
-                <Map hostels={hostels} /> {/* Pass hostels data to MapComponent */}
-            </div>
-
-            {/* <div className="col">
-                    <h3>Info for clicked on hostel</h3>
-                </div> */}
+            <div className="container-fluid">
+                <div className="row">
+                    <Map hostels={hostels} /> {/* Pass hostels data to MapComponent */}
+                </div>
+                <div className="row">
+                    <h2>Search for Hostels</h2>
+                    <HostelSearch hostels={hostels} />
+                </div>
+            </div >
 
         </>
     );

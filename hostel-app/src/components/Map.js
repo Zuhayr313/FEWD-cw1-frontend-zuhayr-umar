@@ -10,7 +10,7 @@ const Map = ({ hostels }) => {
 
     const initialMarker = {}
     const [activeHostel, setActiveHostel] = useState(initialMarker);
-    const position = [57.543799, -5.504566];
+    const position = [57.148251, -4.682];
 
     const [hostelsData, setHostelsData] = useState(hostels);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -57,15 +57,15 @@ const Map = ({ hostels }) => {
                                     ]}
                                     icon={icon}
                                     eventHandlers={{ click: () => markerClicked(hostel) }}
-
                                 >
                                     <Popup>
                                         <div className="popup" role="alert">
-                                            Here is the location of the {hostel.name} cafe. <br />
-                                            {/* {hostel.description} <br /> */}
+                                            Here is the location of the {hostel.name} cafe.
                                         </div>
                                     </Popup>
+
                                 </Marker>
+
                             ))}
 
                         </MapContainer>
@@ -82,7 +82,7 @@ const Map = ({ hostels }) => {
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
         </>
     );
 };
