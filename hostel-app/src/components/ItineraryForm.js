@@ -219,7 +219,8 @@ const ItineraryForm = () => {
                 <button type="submit">Submit</button>
             </form>
 
-
+            <br></br>
+            <ReviewForm />
         </div>
     );
 };

@@ -7,6 +7,9 @@ const ReviewForm = () => {
     const [reviewer, setReviewer] = useState('');
     const [review, setReview] = useState('');
 
+    const [selectedRating, setSelectedRating] = useState('');
+
+
     useEffect(() => {
         fetchHostels();
     }, []);
@@ -32,11 +35,23 @@ const ReviewForm = () => {
         setSelectedHostelID(e.target.value);
     };
 
+    const handleSelectedRatingChange = (event) => {
+        const value = event.target.value;
+        // Allow only numbers 1 through 5
+        if (value === '' || (/^[1-5]$/).test(value)) {
+            setSelectedRating(value);
+        }
+    };
+
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('hostelOptions Submission:', hostelOptions);
+        console.log('selectedHostelID picked:', selectedHostelID);
+        console.log('reviewer:', reviewer);
+        console.log('review written:', review);
+        console.log('Rating:', selectedRating);
 
 
         const reviewData = { reviewer, review };
@@ -63,6 +78,24 @@ const ReviewForm = () => {
             setReview('');
         } catch (error) {
             console.error('Failed to submit review:', error);
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/hostels/rate/${selectedHostelID}/${selectedRating}`, {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Success:', result);
+
+            // Reset form fields
+            setSelectedRating('');
+        } catch (error) {
+            console.error('Failed to submit rating:', error);
         }
     };
 
@@ -100,6 +133,19 @@ const ReviewForm = () => {
                     ></textarea>
                 </label>
             </div>
+
+            <div>
+                <label>
+                    Enter Rating For Chosen Hostel(1-5):
+                    <input
+                        type="text"
+                        value={selectedRating}
+                        onChange={handleSelectedRatingChange}
+                        placeholder="Rating (1-5)"
+                    />
+                </label>
+            </div>
+
             <button type="submit">Submit Review</button>
         </form>
     );

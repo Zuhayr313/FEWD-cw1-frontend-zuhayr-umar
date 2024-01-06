@@ -1,21 +1,36 @@
-import React from "react";
-
+import React, { useState, useEffect } from 'react';
+import Map from './Map';
 
 const Home = () => {
-    return (
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col"><h3>Who we are...</h3>
-                    <p>We are a small local chain of cafes specialising in simple, wholesome, locally sourced dishes.</p>
-                </div>
-                <div className="col"><h3>Where we are ...</h3>
-                </div>
-                <div className="col">
-                    <h3>Explore our menu ...</h3>
-                </div>
+    const [hostels, setHostels] = useState([]);
 
+    useEffect(() => {
+        // Fetch the hostels data
+        const fetchHostels = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/hostels');
+                const data = await response.json();
+                setHostels(data); // Set the hostels data
+                //console.log(data);
+            } catch (error) {
+                console.error('Error fetching hostels:', error);
+            }
+        };
+
+        fetchHostels();
+    }, []);
+
+    return (
+        <>
+            <div>
+                <Map hostels={hostels} /> {/* Pass hostels data to MapComponent */}
             </div>
-        </div>
+
+            {/* <div className="col">
+                    <h3>Info for clicked on hostel</h3>
+                </div> */}
+
+        </>
     );
 };
 
