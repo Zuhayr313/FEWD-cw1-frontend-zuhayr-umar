@@ -22,12 +22,12 @@ const ItineraryForm = () => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            const simplifiedData = data.map(hostel => ({
+            const Data = data.map(hostel => ({
                 id: hostel.id,
                 name: hostel.name
             }));
-            setHostelOptions(simplifiedData);
-            //console.log('Hostel Options:', simplifiedData);
+            setHostelOptions(Data);
+            //console.log('Hostel Options:', Data);
         } catch (error) {
             console.error('There has been a problem with your fetch operation:', error);
         }

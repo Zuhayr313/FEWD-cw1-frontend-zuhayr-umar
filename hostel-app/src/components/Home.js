@@ -25,11 +25,19 @@ const Home = () => {
         <>
             <div className="container-fluid">
                 <div className="row">
-                    <Map hostels={hostels} /> {/* Pass hostels data to MapComponent */}
+                    <Map hostels={hostels} />
                 </div>
                 <div className="row">
-                    <h2>Search for Hostels</h2>
-                    <HostelSearch hostels={hostels} />
+                    <div className="col">
+                    </div>
+
+                    <div className="col-9">
+                        <h2>Search for Hostels</h2>
+                        <HostelSearch hostels={hostels} />
+                    </div>
+
+                    <div className="col">
+                    </div>
                 </div>
             </div >
 

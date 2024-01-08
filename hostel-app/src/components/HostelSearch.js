@@ -3,7 +3,7 @@ import StyledHostelSearch from "./StyledHostelSearch";
 
 function Search({ hostels }) {
     const [searchField, setSearchField] = useState("");
-    const [cafeFilter, setCafeFilter] = useState("all"); // "all", "true", or "false"
+    const [cafeFilter, setCafeFilter] = useState("all");
     const [keyPhrase, setKeyPhrase] = useState("");
 
     const filteredHostels = hostels.filter((hostel) => {
@@ -46,7 +46,6 @@ function Search({ hostels }) {
                     <option value="false">Without Café</option>
                 </select>
             </div>
-            {/* Display search criteria */}
             {/* <div>
                 <p>Search Term: {searchField}</p>
                 <p>Key Phrase: {keyPhrase}</p>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const ReviewForm = () => {
-    const [selectedHostelID, setSelectedHostelID] = useState([]);
+    const [selectedHostelID, setSelectedHostelID] = useState('');
     const [hostelOptions, setHostelOptions] = useState([]);
 
     const [reviewer, setReviewer] = useState('');
