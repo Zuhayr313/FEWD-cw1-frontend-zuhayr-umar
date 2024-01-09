@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 
-const IndividualHostelMapMap = ({ hostels }) => {
+const IndividualHostelMap = ({ hostels }) => {
     const icon = new Icon({
         iconUrl: "/hostelIcon.png",
         iconSize: [25, 25],
@@ -88,4 +88,4 @@ const IndividualHostelMapMap = ({ hostels }) => {
     );
 };
 
-export default IndividualHostelMapMap;
+export default IndividualHostelMap;
