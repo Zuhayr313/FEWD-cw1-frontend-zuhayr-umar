@@ -4,8 +4,8 @@ import { Icon } from "leaflet";
 
 const IndividualHostelMapMap = ({ hostels }) => {
     const icon = new Icon({
-        iconUrl: "/markerIcon.svg",
-        iconSize: [30, 30],
+        iconUrl: "/hostelIcon.png",
+        iconSize: [25, 25],
     });
 
     const initialMarker = {}
@@ -49,41 +49,39 @@ const IndividualHostelMapMap = ({ hostels }) => {
     return (
         <>
             <div className="container-fluid">
-                <div className="row">
-                    <div className={`col-12`}>
-                        <MapContainer
-                            center={position}
-                            zoom={7}
-                            scrollWheelZoom={true}
-                            className="map"
-                        >
-                            <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
+                <div className="col">
+                    <MapContainer
+                        center={position}
+                        zoom={7}
+                        scrollWheelZoom={true}
+                        className="map"
+                    >
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
 
-                            {hostelsData.map((hostel) => (
-                                <Marker
-                                    key={hostel.id}
-                                    position={[
-                                        hostel.location.lat,
-                                        hostel.location.long,
-                                    ]}
-                                    icon={icon}
-                                    eventHandlers={{ click: () => markerClicked(hostel) }}
-                                >
-                                    <Popup>
-                                        <div className="popup" role="alert">
-                                            Here is the location of the {hostel.name} cafe.
-                                        </div>
-                                    </Popup>
+                        {hostelsData.map((hostel) => (
+                            <Marker
+                                key={hostel.id}
+                                position={[
+                                    hostel.location.lat,
+                                    hostel.location.long,
+                                ]}
+                                icon={icon}
+                                eventHandlers={{ mouseover: () => markerClicked(hostel) }}
+                            >
+                                <Popup>
+                                    <div className="popup" role="alert">
+                                        Here is the location of the {hostel.name} cafe.
+                                    </div>
+                                </Popup>
 
-                                </Marker>
+                            </Marker>
 
-                            ))}
+                        ))}
 
-                        </MapContainer>
-                    </div>
+                    </MapContainer>
                 </div>
             </div >
         </>

@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
     return (
-        <div className="container-fluid bg-white sticky-top">
+        <div className="container-fluid bg-black sticky-top">
             <div className="container">
-                <nav className="navbar navbar-expand-lg bg-white navbar-light py-2 py-lg-0">
+                <nav className="navbar navbar-expand-lg bg-black navbar-dark py-2 py-lg-0">
                     <button
                         type="button"
                         className="navbar-toggler ms-auto me-0"
@@ -22,7 +22,6 @@ const Navbar = () => {
                             <NavLink to="/itinerary" className="nav-item nav-link" activeClassName="active">
                                 Itinerary
                             </NavLink>
-                            {/* Add more NavLink components as needed */}
                         </div>
                         <div className="border-start ps-4 d-none d-lg-block">
                             <button type="button" className="btn btn-sm p-0">

@@ -8,7 +8,6 @@ const HostelSearch = ({ hostels }) => {
     }
 
     return (
-
         <Accordion>
             {hostels.map((hostel, index) => (
                 <Accordion.Item eventKey={index} key={index}>

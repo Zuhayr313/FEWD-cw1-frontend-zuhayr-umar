@@ -38,14 +38,14 @@
 }
 
 .nav-item.nav-link {
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and text color */
-  /* Other styles for your nav-link */
+  transition: background-color 0.3s, color 0.3s;
+  padding: 10px;
 }
 
 .nav-link.active {
-  /*border-radius: 20px; /* Adjust for desired pill shape */
-  background-color: #007bff; /* Example background color */
-  color: white; /* Text color for active link */
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
 }
 
 list {
@@ -60,29 +60,36 @@ list {
 }
 
 .popup {
-  background-color: #9382fe;
+  background-color: #007bff;
   color: rgb(247, 247, 251);
   border-radius: 12px;
-  padding: 20px;
+  padding: 15px;
   width: 180px;
-  height: 90px;
+  height: 80px;
   text-align: center;
 }
 
+.map {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .info-panel {
-  /* position: fixed; */
   right: 0;
-  top: 40px;
-  width: 300px; /* Adjust as needed */
-  /* height: 50vh; */
+  width: 300px;
   background-color: white;
   box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  /* display: none; Initially hidden */
 }
 
 .info-panel.open {
-  display: block; /* Show when open */
+  display: block;
+  top: 15px;
+  height: 500px;
+}
+
+.info-slider {
+  margin-top: 30px;
 }
 
 .map-container {
@@ -90,4 +97,67 @@ list {
   width: 50%;
   margin: 0;
   padding: 0;
+}
+
+.close-info-panel {
+  float: right;
+}
+
+.home-page-header {
+  text-align: center;
+  color: white;
+  background-color: black;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.itinerary-page-header {
+  text-align: center;
+  color: white;
+  background-color: black;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.search-area {
+  margin-bottom: "10px";
+}
+
+.search-bar {
+  width: "calc(60% - 10px)";
+}
+
+.key-phrase-bar {
+  width: "20%";
+  margin-left: "10px";
+}
+
+.cafe-option-menu {
+  width: "15%";
+  margin-left: "10px";
+}
+
+.search-accordion {
+  margin-top: "10px";
+}
+
+.hostel-map-header {
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  padding: 15px;
+  color: white;
+  background: black;
+}
+
+.itinerary-image-header {
+  background: gray;
+  height: 200px;
 }

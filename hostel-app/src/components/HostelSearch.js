@@ -21,37 +21,41 @@ function Search({ hostels }) {
 
     return (
         <div>
-            <div style={{ marginBottom: "10px" }}>
-                <input
-                    className="form-control d-inline-block"
-                    style={{ width: "calc(60% - 10px)" }}
-                    type="text"
-                    placeholder="Search for Hostels..."
-                    onChange={(e) => setSearchField(e.target.value)}
-                />
-                <input
-                    className="form-control d-inline-block"
-                    style={{ width: "20%", marginLeft: "10px" }}
-                    type="text"
-                    placeholder="Key phrase..."
-                    onChange={(e) => setKeyPhrase(e.target.value)}
-                />
-                <select
-                    className="form-control d-inline-block"
-                    style={{ width: "15%", marginLeft: "10px" }}
-                    onChange={(e) => setCafeFilter(e.target.value)}
-                >
-                    <option value="all">All Hostels</option>
-                    <option value="true">With Café</option>
-                    <option value="false">Without Café</option>
-                </select>
+            <div className="container-fluid search-area" >
+                <div className="row map-row">
+                    <div className="col-7">
+
+                        <input
+                            className="form-control d-inline-block search-bar"
+                            type="text"
+                            placeholder="Search for Hostels..."
+                            onChange={(e) => setSearchField(e.target.value)}
+                        />
+                    </div>
+                    <div className="col-3">
+                        <input
+                            className="form-control d-inline-block key-phrase-bar"
+                            type="text"
+                            placeholder="Key phrase..."
+                            onChange={(e) => setKeyPhrase(e.target.value)}
+                        />
+                    </div>
+                    <div className="col-2">
+                        <select
+                            className="form-control d-inline-block cafe-option-menu"
+                            onChange={(e) => setCafeFilter(e.target.value)}
+                        >
+                            <option value="all">All Hostels</option>
+                            <option value="true">With Café</option>
+                            <option value="false">Without Café</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            {/* <div>
-                <p>Search Term: {searchField}</p>
-                <p>Key Phrase: {keyPhrase}</p>
-                <p>Café Filter: {cafeFilter}</p>
-            </div> */}
+
+
             {searchField.length >= 1 && <StyledHostelSearch hostels={filteredHostels} />}
+
         </div>
     );
 }

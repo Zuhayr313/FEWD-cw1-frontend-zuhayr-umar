@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Map from './Map';
 import HostelSearch from './HostelSearch';
+import Footer from './Footer';
 
 const Home = () => {
     const [hostels, setHostels] = useState([]);
 
     useEffect(() => {
-        // Fetch the hostels data
         const fetchHostels = async () => {
             try {
                 const response = await fetch('http://localhost:3000/hostels');
                 const data = await response.json();
-                setHostels(data); // Set the hostels data
+                setHostels(data);
                 //console.log(data);
             } catch (error) {
                 console.error('Error fetching hostels:', error);
@@ -23,24 +23,33 @@ const Home = () => {
 
     return (
         <>
-            <div className="container-fluid">
-                <div className="row">
+            <div className="container-fluid home-page-container">
+                <div className="row map-row">
                     <Map hostels={hostels} />
                 </div>
+
+                <div className="row home-page-header">
+                    <h2>Search for Hostels</h2>
+
+                </div>
+
                 <div className="row">
                     <div className="col">
                     </div>
 
                     <div className="col-9">
-                        <h2>Search for Hostels</h2>
                         <HostelSearch hostels={hostels} />
                     </div>
 
                     <div className="col">
                     </div>
                 </div>
-            </div >
 
+            </div >
+            {/* 
+            <div className="page-footer">
+                <Footer />
+            </div> */}
         </>
     );
 };

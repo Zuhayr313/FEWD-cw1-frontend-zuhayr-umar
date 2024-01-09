@@ -4,8 +4,8 @@ import { Icon } from "leaflet";
 
 const Map = ({ hostels }) => {
     const icon = new Icon({
-        iconUrl: "/markerIcon.svg",
-        iconSize: [30, 30],
+        iconUrl: "/hostelIcon.png",
+        iconSize: [25, 25],
     });
 
     const initialMarker = {}
@@ -56,11 +56,11 @@ const Map = ({ hostels }) => {
                                         hostel.location.long,
                                     ]}
                                     icon={icon}
-                                    eventHandlers={{ click: () => markerClicked(hostel) }}
+                                    eventHandlers={{ mouseover: () => markerClicked(hostel) }}
                                 >
                                     <Popup>
                                         <div className="popup" role="alert">
-                                            Here is the location of the {hostel.name} cafe.
+                                            {hostel.address}, {hostel.postcode}
                                         </div>
                                     </Popup>
 
@@ -73,10 +73,20 @@ const Map = ({ hostels }) => {
                     {isPanelOpen && (
                         <div className="col-md-3 info-panel">
                             {activeHostel.id && (
-                                <div>
-                                    <button onClick={closePanel}>Close</button>
-                                    <h3>{activeHostel.name}</h3>
-                                    <p>{activeHostel.description}</p>
+                                <div className="info-slider">
+
+                                    <div className="row">
+                                        <div className="col">
+                                            <h3>{activeHostel.name}</h3>
+                                        </div>
+                                        <div className="col ">
+                                            <button type="button" class="btn btn-secondary close-info-panel" onClick={closePanel}>Close</button>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <p>{activeHostel.description}</p>
+                                        <p>Get More Information By Search Hostels Below...</p>
+                                    </div>
                                 </div>
                             )}
                         </div>
