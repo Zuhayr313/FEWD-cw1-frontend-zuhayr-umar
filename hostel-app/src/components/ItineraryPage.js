@@ -14,17 +14,28 @@ const Itinerary = () => {
     const handleShow = () => setShow(true);
 
     const [showStage, setShowStage] = useState(false);
-    const handleCloseStage = () => setShowStage(false);
+    const handleCloseStage = () => setShowStage(false) && handleSubmit();
     const handleShowStage = () => setShowStage(true);
 
     const [showUpdateStage, setShowUpdateStage] = useState(false);
     const handleCloseUpdateStage = () => setShowUpdateStage(false);
     const handleShowUpdateStage = () => setShowUpdateStage(true);
 
+    const [showDeleteStage, setShowDeleteStage] = useState(false);
+    const handleCloseDeleteStage = () => setShowDeleteStage(false);
+    const handleShowDeleteStage = () => setShowDeleteStage(true);
+
+    const [showUpdateStartDate, setShowUpdateStartDate] = useState(false);
+    const handleCloseUpdateStartDate = () => setShowUpdateStartDate(false);
+    const handleShowUpdateStartDate = () => setShowUpdateStartDate(true);
 
     const [hostel, setSelectedHostelID] = useState([]);
     const [nights, setStayDuration] = useState('');
     const [stageToUpdate, setStage] = useState('');
+    const [stageToDelete, setStageDelete] = useState(null);
+    const [newStartDate, setNewStartDate] = useState('');
+
+
 
     const [hostelOptions, setHostelOptions] = useState([]);
     const [showHostelList, setShowHostelList] = useState(false);
@@ -88,6 +99,15 @@ const Itinerary = () => {
     const handleStageSelection = (event) => {
         const value = event.target.value;
         setStage(value.replace(/[^0-9]/g, ''));
+    };
+
+    const handleStageDeletion = (event) => {
+        const value = event.target.value;
+        setStageDelete(value.replace(/[^0-9]/g, ''));
+    };
+
+    const handleUpdateStartDate = (e) => {
+        setNewStartDate(e.target.value);
     };
 
     const handleSubmitStage = async (e) => {
@@ -207,7 +227,6 @@ const Itinerary = () => {
 
             const result = await response.json();
 
-            // Iterate through the result to check if the user has an itinerary
             for (let itinerary of result) {
                 if (itinerary.user === userName) {
                     try {
@@ -224,12 +243,13 @@ const Itinerary = () => {
                         }
 
                         const result = await response.json();
-                        console.log('Itinerary successfully created:', result);
+                        console.log('Stage ', stageToUpdate, ' successfully Updated:', result);
 
                         setSelectedHostelID('');
                         setStayDuration('');
+                        setStage('');
                     } catch (error) {
-                        console.error('Failed to create itinerary:', error);
+                        console.error('Failed to Updated Stage:', error);
                     }
 
                     userItineraryExists = true;
@@ -248,236 +268,404 @@ const Itinerary = () => {
         }
 
     };
+
+    const handleSubmitDeleteStage = async (e) => {
+        let userItineraryExists = false;
+
+        const stageToDeleteSubtracted = stageToDelete - 1;
+
+        try {
+            const response = await fetch(`http://localhost:3000/itineraries`, {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            for (let itinerary of result) {
+                if (itinerary.user === userName) {
+                    try {
+                        const response = await fetch(`http://localhost:3000/itineraries/stages/delete/${userName}/${stageToDeleteSubtracted}`, {
+                            method: 'GET',
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Error: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        console.log('Stage ', stageToUpdate, ' successfully delete:', result);
+
+                        setStageDelete('');
+                    } catch (error) {
+                        console.error('Failed to delete Stage:', error);
+                    }
+
+                    userItineraryExists = true;
+
+                }
+            }
+
+            if (!userItineraryExists) {
+                alert('User does not have itinerary. Click Add Stage to create a itinerary.');
+            }
+
+        } catch (error) {
+            console.error('Failed to fetch itineraries:', error);
+        }
+
+    };
+
+    const handleSubmitUpdateStartDate = async (e) => {
+
+        const formattedDate = newStartDate + 'T00:00:00.000Z';
+        console.log('Submitting date:', formattedDate);
+        let userItineraryExists = false;
+
+        try {
+            const response = await fetch(`http://localhost:3000/itineraries`, {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            for (let itinerary of result) {
+                if (itinerary.user === userName) {
+                    try {
+                        const response = await fetch(`http://localhost:3000/itineraries/startdate/${userName}/${formattedDate}`, {
+                            method: 'GET'
+
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Error: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        console.log('Start Date successfully updated:', result);
+
+                        setNewStartDate('');
+                    } catch (error) {
+                        console.error('Failed to updated Start Date:', error);
+                    }
+
+                    userItineraryExists = true;
+
+                }
+            }
+
+            if (!userItineraryExists) {
+                alert('User does not have itinerary. Click Add Stage to create a itinerary.');
+            }
+
+            console.log('Itinerary already created:', userItineraryExists ? 'yes' : 'no');
+
+        } catch (error) {
+            console.error('Failed to fetch itineraries:', error);
+        }
+
+    };
+
     return (
         <>
-            <div className="container-fluid itinerary-page-container">
-                <div className="row itinerary-image-header">
-                    <p>Image Placeholder</p>
-                </div>
-
-                <div className="row itinerary-page-header">
-                    <h2>Itinerary</h2>
-
-                </div>
-
-                <div className="row">
-                    <div className="col">
-                        empty
+            <div className="container-fluid itinerary-page-container" style={{ flex: '1' }}>
+                <div className='content-wrap'>
+                    <div className="row itinerary-image-header">
                     </div>
 
-                    <div className="col-9" >
-                        <div className='row'>
-                            <div className="col" >
+                    <div className="row itinerary-page-header">
+                        <h2>Itinerary</h2>
 
-                                <p>Itinerary for {userName}</p>
-                            </div>
-                            <div className="col" >
-                                <Button variant="primary" onClick={handleShow} className="close-info-panel ms-2">
-                                    Add User
-                                </Button>
+                    </div>
 
-                                <Button variant="primary" className="close-info-panel ms-2">
-                                    Update Start Date
-                                </Button>
+                    <div className="row">
+                        <div className="col">
 
-                                <Button variant="primary" className="close-info-panel ms-2">
-                                    Delete Stage
-                                </Button>
+                        </div>
 
-                                <Button variant="primary" onClick={handleShowUpdateStage} className="close-info-panel ms-2">
-                                    Update Stage
-                                </Button>
+                        <div className="col-9" >
+                            <div className='row'>
+                                <div className="col" >
 
-                                <Button variant="primary" onClick={handleShowStage} className="close-info-panel ms-2">
-                                    Add Stage
-                                </Button>
-
-                            </div>
-
-                            <Modal show={show} onHide={handleClose} >
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Add Username</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form>
-                                        <Form.Group className="mb-3" controlId="usernameControlInput">
-                                            <Form.Label>UserName</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter username"
-                                                value={userName}
-                                                onChange={e => setUserName(e.target.value)}
-                                                autoFocus
-                                            />
-                                        </Form.Group>
-                                    </Form>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleClose}>
-                                        Close
+                                    <h4>Itinerary for {userName}</h4>
+                                </div>
+                                <div className="col-7" >
+                                    <Button variant="primary" onClick={handleShow} className="close-info-panel ms-2">
+                                        Add User
                                     </Button>
-                                    <Button variant="primary" onClick={() => { handleClose(); handleSubmit(); }}>
-                                        Save Username
+
+                                    <Button variant="primary" onClick={handleShowUpdateStartDate} className="close-info-panel ms-2">
+                                        Update Start Date
                                     </Button>
-                                </Modal.Footer>
-                            </Modal>
 
-
-                            <Modal show={showStage} onHide={handleCloseStage} >
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Add Stage</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form>
-                                        <Form.Group className="mb-3" controlId="hostelControlInput">
-                                            <div>
-                                                <label>Select a Hostel:</label>
-                                                <select value={hostel} onChange={handleHostelSelection}>
-                                                    <option value="">Select a Hostel</option>
-                                                    {hostelOptions.map(hostel => (
-                                                        <option key={hostel.id} value={hostel.id}>
-                                                            {hostel.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                        </Form.Group>
-                                        <Form.Group className="mb-3" controlId="hostelDurationControlInput">
-                                            <Form.Label>Stay Duration (in days):</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                value={nights}
-                                                onChange={handleDurationChange}
-                                                placeholder="Enter number of days"
-                                                autoFocus
-                                            />
-                                        </Form.Group>
-
-                                        {showHostelList && (
-                                            <div>
-                                                <h5>Hostel Options:</h5>
-                                                <ul>
-                                                    {hostelOptions.map(hostel => (
-                                                        <li key={hostel.id}>
-                                                            {hostel.name} {/*(ID: {hostel.id}) */}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-
-                                    </Form>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={toggleHostelList}>
-                                        {showHostelList ? 'Hide Hostel Options' : 'Show Hostel Options'}
+                                    <Button variant="primary" onClick={handleShowDeleteStage} className="close-info-panel ms-2">
+                                        Delete Stage
                                     </Button>
-                                    <Button variant="secondary" onClick={handleCloseStage}>
-                                        Close
-                                    </Button>
-                                    <Button variant="primary" onClick={() => { handleCloseStage(); handleSubmitStage(); }}>
-                                        Save Stage
-                                    </Button>
-                                </Modal.Footer>
-                            </Modal>
 
-
-                            <Modal show={showUpdateStage} onHide={handleCloseUpdateStage} >
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Update Stage</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form>
-                                        <Form.Group className="mb-3" controlId="stageControlInput">
-                                            <Form.Label>Enter Stage:</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                value={stageToUpdate}
-                                                onChange={handleStageSelection}
-                                                placeholder="Enter Stage to Update"
-                                                autoFocus
-                                            />
-                                        </Form.Group>
-                                        <Form.Group className="mb-3" controlId="hostelControlInput">
-                                            <div>
-                                                <label>Select a Hostel:</label>
-                                                <select value={hostel} onChange={handleHostelSelection}>
-                                                    <option value="">Select a Hostel</option>
-                                                    {hostelOptions.map(hostel => (
-                                                        <option key={hostel.id} value={hostel.id}>
-                                                            {hostel.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                        </Form.Group>
-                                        <Form.Group className="mb-3" controlId="hostelDurationControlInput">
-                                            <Form.Label>Stay Duration (in days):</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                value={nights}
-                                                onChange={handleDurationChange}
-                                                placeholder="Enter number of days"
-                                                autoFocus
-                                            />
-                                        </Form.Group>
-
-                                        {showHostelList && (
-                                            <div>
-                                                <h5>Hostel Options:</h5>
-                                                <ul>
-                                                    {hostelOptions.map(hostel => (
-                                                        <li key={hostel.id}>
-                                                            {hostel.name} {/*(ID: {hostel.id}) */}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-
-                                    </Form>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={toggleHostelList}>
-                                        {showHostelList ? 'Hide Hostel Options' : 'Show Hostel Options'}
-                                    </Button>
-                                    <Button variant="secondary" onClick={handleCloseUpdateStage}>
-                                        Close
-                                    </Button>
-                                    <Button variant="primary" onClick={() => { handleCloseUpdateStage(); handleSubmitUpdateStage(); }}>
+                                    <Button variant="primary" onClick={handleShowUpdateStage} className="close-info-panel ms-2">
                                         Update Stage
                                     </Button>
-                                </Modal.Footer>
-                            </Modal>
+
+                                    <Button variant="primary" onClick={handleShowStage} className="close-info-panel ms-2">
+                                        Add Stage
+                                    </Button>
+
+                                </div>
+
+                                <Modal show={show} onHide={handleClose} >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Add Username</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="usernameControlInput">
+                                                <Form.Label>UserName</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Enter username"
+                                                    value={userName}
+                                                    onChange={e => setUserName(e.target.value)}
+                                                    autoFocus
+                                                />
+                                            </Form.Group>
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleClose}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={() => { handleClose(); handleSubmit(); }}>
+                                            Save Username
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
 
 
+                                <Modal show={showStage} onHide={handleCloseStage} >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Add Stage</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="hostelControlInput">
+                                                <div>
+                                                    <label>Select a Hostel:</label>
+                                                    <select value={hostel} onChange={handleHostelSelection}>
+                                                        <option value="">Select a Hostel</option>
+                                                        {hostelOptions.map(hostel => (
+                                                            <option key={hostel.id} value={hostel.id}>
+                                                                {hostel.name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </Form.Group>
+                                            <Form.Group className="mb-3" controlId="hostelDurationControlInput">
+                                                <Form.Label>Stay Duration (in days):</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={nights}
+                                                    onChange={handleDurationChange}
+                                                    placeholder="Enter number of days"
+                                                    autoFocus
+                                                />
+                                            </Form.Group>
+
+                                            {showHostelList && (
+                                                <div>
+                                                    <h5>Hostel Options:</h5>
+                                                    <ul>
+                                                        {hostelOptions.map(hostel => (
+                                                            <li key={hostel.id}>
+                                                                {hostel.name}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={toggleHostelList}>
+                                            {showHostelList ? 'Hide Hostel Options' : 'Show Hostel Options'}
+                                        </Button>
+                                        <Button variant="secondary" onClick={handleCloseStage}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={() => { handleSubmitStage(); handleCloseStage(); handleSubmit(); }}>
+                                            Save Stage
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+
+
+                                <Modal show={showUpdateStage} onHide={handleCloseUpdateStage} >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Update Stage</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="stageControlInput">
+                                                <Form.Label>Enter Stage:</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={stageToUpdate}
+                                                    onChange={handleStageSelection}
+                                                    placeholder="Enter Stage to Update"
+                                                    autoFocus
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="mb-3" controlId="hostelControlInput">
+                                                <div>
+                                                    <label>Select a Hostel:</label>
+                                                    <select value={hostel} onChange={handleHostelSelection}>
+                                                        <option value="">Select a Hostel</option>
+                                                        {hostelOptions.map(hostel => (
+                                                            <option key={hostel.id} value={hostel.id}>
+                                                                {hostel.name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </Form.Group>
+                                            <Form.Group className="mb-3" controlId="hostelDurationControlInput">
+                                                <Form.Label>Stay Duration (in days):</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={nights}
+                                                    onChange={handleDurationChange}
+                                                    placeholder="Enter number of days"
+                                                    autoFocus
+                                                />
+                                            </Form.Group>
+
+                                            {showHostelList && (
+                                                <div>
+                                                    <h5>Hostel Options:</h5>
+                                                    <ul>
+                                                        {hostelOptions.map(hostel => (
+                                                            <li key={hostel.id}>
+                                                                {hostel.name}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={toggleHostelList}>
+                                            {showHostelList ? 'Hide Hostel Options' : 'Show Hostel Options'}
+                                        </Button>
+                                        <Button variant="secondary" onClick={handleCloseUpdateStage}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={() => { handleCloseUpdateStage(); handleSubmitUpdateStage(); }}>
+                                            Update Stage
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+
+                                <Modal show={showDeleteStage} onHide={handleCloseDeleteStage} >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Delete Stage</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="stageDeleteControlInput">
+                                                <Form.Label>Enter Stage:</Form.Label>
+                                                <Form.Control
+                                                    type="number"
+                                                    value={stageToDelete}
+                                                    onChange={handleStageDeletion}
+                                                    placeholder="Enter Stage to Delete"
+                                                    autoFocus
+                                                />
+                                            </Form.Group>
+
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleCloseDeleteStage}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={() => { handleCloseDeleteStage(); handleSubmitDeleteStage(); }}>
+                                            Delete Stage
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+
+
+                                <Modal show={showUpdateStartDate} onHide={handleCloseUpdateStartDate} >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Update Start Date</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="updateStartDateControlInput">
+                                                <Form.Label>Enter New Start Date:</Form.Label>
+                                                <Form.Control
+                                                    type="date"
+                                                    value={newStartDate}
+                                                    onChange={handleUpdateStartDate}
+                                                    placeholder="Enter New Start Date"
+                                                    autoFocus
+                                                />
+                                            </Form.Group>
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleCloseUpdateStartDate}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={() => { handleCloseUpdateStartDate(); handleSubmitUpdateStartDate(); }}>
+                                            Update Start Date
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+
+
+                            </div>
+
+                            <div className='row'>
+                                {itinerary.length > 0 ? (
+                                    itinerary.map((itineraryItem, index) => (
+                                        <div key={index} className="itinerary-item">
+                                            <Button variant="primary" onClick={() => { handleClose(); handleSubmit(); }} className="close-info-panel ms-2">
+                                                Refresh Itinerary
+                                            </Button>
+                                            <p>Itinerary Start Date: {new Date(itineraryItem.startdate).toLocaleDateString()}</p>
+
+                                            <StyledItineraryStages stages={itineraryItem.stages} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No itinerary Available.</p>
+                                )}
+                            </div>
                         </div>
 
-                        <div className='row'>
-                            {itinerary.length > 0 ? (
-                                itinerary.map((itineraryItem, index) => (
-                                    <div key={index} className="itinerary-item">
-                                        <p>User: {itineraryItem.user}</p>
-                                        <p>Start Date: {new Date(itineraryItem.startdate).toLocaleDateString()}</p>
-                                        <StyledItineraryStages stages={itineraryItem.stages} />
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No itinerary Available.</p>
-                            )}
+                        <div className="col">
+
                         </div>
                     </div>
 
-                    <div className="col">
-                        empty
+                    <div className="row">
+                        <Footer />
                     </div>
+
                 </div>
-
             </div >
-            {/* 
-            <div className="page-footer">
-                <Footer />
-            </div> */}
+
         </>
     );
 };

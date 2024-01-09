@@ -45,7 +45,7 @@ function Search({ hostels }) {
                             className="form-control d-inline-block cafe-option-menu"
                             onChange={(e) => setCafeFilter(e.target.value)}
                         >
-                            <option value="all">All Hostels</option>
+                            <option value="all">With/Without Café</option>
                             <option value="true">With Café</option>
                             <option value="false">Without Café</option>
                         </select>

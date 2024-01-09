@@ -23,33 +23,35 @@ const Home = () => {
 
     return (
         <>
-            <div className="container-fluid home-page-container">
-                <div className="row map-row">
-                    <Map hostels={hostels} />
-                </div>
-
-                <div className="row home-page-header">
-                    <h2>Search for Hostels</h2>
-
-                </div>
-
-                <div className="row">
-                    <div className="col">
+            <div className="container-fluid home-page-container" style={{ flex: '1' }}>
+                <div className='content-wrap'>
+                    <div className="row map-row">
+                        <Map hostels={hostels} />
                     </div>
 
-                    <div className="col-9">
-                        <HostelSearch hostels={hostels} />
+                    <div className="row home-page-header">
+                        <h2>Search for Hostels</h2>
+
                     </div>
 
-                    <div className="col">
+                    <div className="row">
+                        <div className="col">
+                        </div>
+
+                        <div className="col-9">
+                            <HostelSearch hostels={hostels} />
+                        </div>
+
+                        <div className="col">
+                        </div>
+                    </div>
+                    <div className="row">
+                        <Footer />
                     </div>
                 </div>
-
             </div >
-            {/* 
-            <div className="page-footer">
-                <Footer />
-            </div> */}
+
+
         </>
     );
 };

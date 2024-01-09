@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 
 
 const StyledHostel = ({ item, index }) => {
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -95,6 +96,9 @@ const StyledHostel = ({ item, index }) => {
         } catch (error) {
             console.error('Failed to submit rating:', error);
         }
+
+        window.location.reload();
+
     };
 
     return (

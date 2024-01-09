@@ -116,136 +116,136 @@ const StyledItineraryStages = ({ stages }) => {
 
     return (
 
-        <Accordion>
+        <div className="itinerary-Accordion">
+            <Accordion>
 
-            {hostelsData.map((stage, index) => {
-                const hostel = stage[0];
-                return (
-                    <Accordion.Item eventKey={index} key={index}>
+                {hostelsData.map((stage, index) => {
+                    const hostel = stage[0];
+                    return (
+                        <Accordion.Item eventKey={index} key={index}>
 
-                        <Accordion.Header>Stage {index + 1} - {stage.nights} Nights at {hostel.name}</Accordion.Header>
+                            <Accordion.Header>Stage {index + 1} - {stage.nights} Nights at {hostel.name}</Accordion.Header>
 
-                        <Accordion.Body>
-                            {/* <h3>{hostel.name}</h3>
-                            <p>{hostel.description}</p> */}
+                            <Accordion.Body>
 
-                            <div className="container-fluid">
-                                <div className="row">
+                                <div className="container-fluid">
+                                    <div className="row">
 
-                                    <div className="col">
-                                        <h3>{hostel.name}</h3>
-                                        <p>{hostel.description}</p>
-                                        <p> {hostel.address}, {hostel.postcode}</p>
-                                        <p> {hostel.phone}</p>
-                                        <p> {hostel.email}</p>
-                                        <p>Does it have a cafe?: {getCafe(hostel.cafe)}</p>
-                                        <p> Average Rating: {getAverageRating(hostel.ratings)}</p>
+                                        <div className="col">
+                                            <h3>{hostel.name}</h3>
+                                            <p>{hostel.description}</p>
+                                            <p> {hostel.address}, {hostel.postcode}</p>
+                                            <p> {hostel.phone}</p>
+                                            <p> {hostel.email}</p>
+                                            <p>Does it have a cafe?: {getCafe(hostel.cafe)}</p>
+                                            <p> Average Rating: {getAverageRating(hostel.ratings)}</p>
 
-                                        <div>
-                                            <div className="row">
-                                                <div className="col">
-                                                    <h3>Reviews:</h3>
-                                                </div>
-                                                <div className="col">
+                                            <div>
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <h3>Reviews:</h3>
+                                                    </div>
+                                                    <div className="col">
 
-                                                    <Button variant="primary" onClick={handleShow} className="close-info-panel">
-                                                        Add Review & Rating
-                                                    </Button>
-                                                </div>
-
-
-                                                <Modal show={show} onHide={handleClose}>
-                                                    <Modal.Header closeButton>
-                                                        <Modal.Title>Add Review & Rating</Modal.Title>
-                                                    </Modal.Header>
-                                                    <Modal.Body>
-                                                        <Form>
-                                                            <Form.Group className="mb-3" controlId="reviewerControlInput">
-                                                                <Form.Label>Reviewer</Form.Label>
-                                                                <Form.Control
-                                                                    type="text"
-                                                                    placeholder="Enter Name"
-                                                                    value={reviewer}
-                                                                    onChange={e => setReviewer(e.target.value)}
-                                                                    autoFocus
-                                                                />
-                                                            </Form.Group>
-
-                                                            <Form.Group
-                                                                className="mb-3"
-                                                                controlId="reviewControlInput"
-                                                            >
-                                                                <Form.Label>Review</Form.Label>
-                                                                <Form.Control
-                                                                    as="textarea"
-                                                                    rows={3}
-                                                                    placeholder="Enter Review"
-                                                                    value={review}
-                                                                    onChange={e => setReview(e.target.value)}
-                                                                />
-                                                            </Form.Group>
-
-                                                            <Form.Group className="mb-3" controlId="ratingControlInput">
-                                                                <Form.Label>Rating</Form.Label>
-                                                                <Form.Control
-                                                                    type="text"
-                                                                    placeholder="Enter Rating For Chosen Hostel (1-5):"
-                                                                    value={selectedRating}
-                                                                    onChange={handleSelectedRatingChange}
-                                                                    autoFocus
-                                                                />
-                                                            </Form.Group>
-                                                        </Form>
-                                                    </Modal.Body>
-                                                    <Modal.Footer>
-                                                        <Button variant="secondary" onClick={handleClose}>
-                                                            Close
+                                                        <Button variant="primary" onClick={handleShow} className="close-info-panel">
+                                                            Add Review & Rating
                                                         </Button>
-                                                        <Button variant="primary" onClick={() => { handleClose(); handleSubmit(hostel.id); }}>
-                                                            Save Review
-                                                        </Button>
-                                                    </Modal.Footer>
-                                                </Modal>
+                                                    </div>
 
+
+                                                    <Modal show={show} onHide={handleClose}>
+                                                        <Modal.Header closeButton>
+                                                            <Modal.Title>Add Review & Rating</Modal.Title>
+                                                        </Modal.Header>
+                                                        <Modal.Body>
+                                                            <Form>
+                                                                <Form.Group className="mb-3" controlId="reviewerControlInput">
+                                                                    <Form.Label>Reviewer</Form.Label>
+                                                                    <Form.Control
+                                                                        type="text"
+                                                                        placeholder="Enter Name"
+                                                                        value={reviewer}
+                                                                        onChange={e => setReviewer(e.target.value)}
+                                                                        autoFocus
+                                                                    />
+                                                                </Form.Group>
+
+                                                                <Form.Group
+                                                                    className="mb-3"
+                                                                    controlId="reviewControlInput"
+                                                                >
+                                                                    <Form.Label>Review</Form.Label>
+                                                                    <Form.Control
+                                                                        as="textarea"
+                                                                        rows={3}
+                                                                        placeholder="Enter Review"
+                                                                        value={review}
+                                                                        onChange={e => setReview(e.target.value)}
+                                                                    />
+                                                                </Form.Group>
+
+                                                                <Form.Group className="mb-3" controlId="ratingControlInput">
+                                                                    <Form.Label>Rating</Form.Label>
+                                                                    <Form.Control
+                                                                        type="text"
+                                                                        placeholder="Enter Rating For Chosen Hostel (1-5):"
+                                                                        value={selectedRating}
+                                                                        onChange={handleSelectedRatingChange}
+                                                                        autoFocus
+                                                                    />
+                                                                </Form.Group>
+                                                            </Form>
+                                                        </Modal.Body>
+                                                        <Modal.Footer>
+                                                            <Button variant="secondary" onClick={handleClose}>
+                                                                Close
+                                                            </Button>
+                                                            <Button variant="primary" onClick={() => { handleClose(); handleSubmit(hostel.id); }}>
+                                                                Save Review
+                                                            </Button>
+                                                        </Modal.Footer>
+                                                    </Modal>
+
+                                                </div>
+                                                <div className="row">
+                                                    {hostel.reviews && hostel.reviews.length > 0 ? (
+                                                        <ul>
+                                                            {hostel.reviews.map((review, idx) => (
+                                                                <p key={idx}>
+
+                                                                    <strong>Reviewer:</strong> {review.reviewer}
+                                                                    <br></br>
+                                                                    <strong>Review:</strong> {review.review}
+                                                                </p>
+
+                                                            ))}
+                                                        </ul>
+
+                                                    ) : (
+                                                        <p>No reviews available.</p>
+                                                    )}
+
+                                                </div>
                                             </div>
-                                            <div className="row">
-                                                {hostel.reviews && hostel.reviews.length > 0 ? (
-                                                    <ul>
-                                                        {hostel.reviews.map((review, idx) => (
-                                                            <p key={idx}>
+                                        </div>
 
-                                                                <strong>Reviewer:</strong> {review.reviewer}
-                                                                <br></br>
-                                                                <strong>Review:</strong> {review.review}
+                                        <div className="col">
 
-                                                            </p>
-                                                        ))}
-                                                    </ul>
+                                            <h4 className="hostel-map-header">Hostel on Map</h4>
+                                            <IndividualHostelMap hostels={hostel.id} />
 
-                                                ) : (
-                                                    <p>No reviews available.</p>
-                                                )}
-                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="col">
-
-                                        <h4 className="hostel-map-header">Hostel on Map</h4>
-                                        <IndividualHostelMap hostels={hostel.id} />
-
-                                    </div>
                                 </div>
 
-                            </div>
+                            </Accordion.Body>
 
-                        </Accordion.Body>
-
-                    </Accordion.Item>
-                );
-            })}
-        </Accordion>
-
+                        </Accordion.Item>
+                    );
+                })}
+            </Accordion>
+        </div>
     );
 };
 
