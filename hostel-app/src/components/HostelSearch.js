@@ -34,6 +34,7 @@ function Search({ hostels }) {
                     </div>
                     <div className="col-3">
                         <input
+
                             className="form-control d-inline-block key-phrase-bar"
                             type="text"
                             placeholder="Key phrase..."

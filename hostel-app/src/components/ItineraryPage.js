@@ -401,6 +401,10 @@ const Itinerary = () => {
                                         Add User
                                     </Button>
 
+                                    <Button variant="primary" onClick={() => { handleClose(); handleSubmit(); }} className="close-info-panel ms-2">
+                                        Refresh Itinerary
+                                    </Button>
+
                                     <Button variant="primary" onClick={handleShowUpdateStartDate} className="close-info-panel ms-2">
                                         Update Start Date
                                     </Button>
@@ -640,9 +644,7 @@ const Itinerary = () => {
                                 {itinerary.length > 0 ? (
                                     itinerary.map((itineraryItem, index) => (
                                         <div key={index} className="itinerary-item">
-                                            <Button variant="primary" onClick={() => { handleClose(); handleSubmit(); }} className="close-info-panel ms-2">
-                                                Refresh Itinerary
-                                            </Button>
+
                                             <p>Itinerary Start Date: {new Date(itineraryItem.startdate).toLocaleDateString()}</p>
 
                                             <StyledItineraryStages stages={itineraryItem.stages} />
