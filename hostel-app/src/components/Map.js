@@ -18,7 +18,7 @@ const Map = ({ hostels }) => {
 
     const markerClicked = (hostel) => {
         setActiveHostel(hostel)
-        setIsPanelOpen(true); // Open the panel when a marker is clicked
+        setIsPanelOpen(true);
     }
 
     const closePanel = () => {
